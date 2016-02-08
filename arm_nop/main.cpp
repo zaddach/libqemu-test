@@ -9,9 +9,11 @@ uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool i
 
 int main(int argc, char *argv[])
 {
+    CodeFlags code_flags = {.arm = {.thumb = 0}};
+
     libqemu_init(qemu_ld, NULL);
 
-    LLVMValueRef func = libqemu_gen_intermediate_code(0, 0, 0, true);
+    LLVMValueRef func = libqemu_gen_intermediate_code(0, code_flags, true);
     char *func_str = LLVMPrintValueToString(func);
     printf("%s\n", func_str);
     LLVMDisposeMessage(func_str);

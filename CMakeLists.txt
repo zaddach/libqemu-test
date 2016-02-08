@@ -9,8 +9,8 @@ SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
 ExternalProject_Add(libqemu
 #	GIT_REPOSITORY https://github.com/zaddach/libqemu.git
 	GIT_REPOSITORY git@github.com:zaddach/libqemu
-#	GIT_TAG 1c87ce8248bc7842952ef5f1cbd1a781f0ea0aca 
-	GIT_TAG master 
+	GIT_TAG e1ab09b
+#	GIT_TAG master 
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
 	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --enable-debug --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++
 	BUILD_COMMAND ${MAKE}

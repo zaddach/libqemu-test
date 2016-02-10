@@ -28,7 +28,7 @@
 # We also want an user-specified LLVM_ROOT_DIR to take precedence over the
 # system default locations such as /usr/local/bin. Executing find_program()
 # multiples times is the approach recommended in the docs.
-set(llvm_config_names llvm-config-3.4 llvm-config34
+set(llvm_config_names llvm-config-3.5 llvm-config35
                       llvm-config)
 find_program(LLVM_CONFIG
     NAMES ${llvm_config_names}

@@ -7,31 +7,28 @@ SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
 
 FIND_PACKAGE( LLVM REQUIRED COMPONENTS jit bitreader bitwriter ipo linker engine irreader)
 
-ExternalProject_Add(libqemu
-#	GIT_REPOSITORY https://github.com/zaddach/libqemu.git
-	GIT_REPOSITORY git@github.com:zaddach/libqemu
-	GIT_TAG 7063d94
-#	GIT_TAG master 
-	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
-	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --enable-debug --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++
-	BUILD_COMMAND ${MAKE}
-	#BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
-	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
-	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
-	INSTALL_COMMAND make install
-)
-
 INCLUDE_DIRECTORIES(${LLVM_INCLUDE_DIRS})
 ADD_DEFINITIONS(${LLVM_DEFINITIONS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 LINK_DIRECTORIES(${LLVM_LIBRARY_DIRS})
 
 # Build qemulib
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
-    execute_process (
+
+#First check if the submodule has already been checked out.
+#If not, we can do that right here during the CMAKE generation.
+IF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
+    EXECUTE_PROCESS (
 	git submodule update --init libqemu
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-endif (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
+ENDIF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
 
+ExternalProject_Add(libqemu
+	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
+	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --enable-debug --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++
+	BUILD_COMMAND ${MAKE}
+	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
+	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
+	INSTALL_COMMAND make install
+)
 
 SET( QEMU_LIB ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build/arm-lib/libqemu-arm.so )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/include )

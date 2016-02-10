@@ -36,3 +36,4 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/include )
 
 ADD_SUBDIRECTORY( arm_nop )
 ADD_SUBDIRECTORY( thumb_nop )
+ADD_SUBDIRECTORY( arm_invalid_opcode )

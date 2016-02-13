@@ -30,12 +30,12 @@ ExternalProject_Add(libqemu
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
 	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++ ${QEMU_DEBUG}
 	BUILD_COMMAND ${MAKE}
-	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
-	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
+	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
+	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
 	INSTALL_COMMAND make install
 )
 
-SET( QEMU_LIB ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build/arm-lib/libqemu-arm.so )
+SET( QEMU_LIB ${CMAKE_CURRENT_BINARY_DIR}/libqemu/arm-lib/libqemu-arm.so )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/include )
 	
 

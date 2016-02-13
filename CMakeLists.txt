@@ -12,6 +12,11 @@ ADD_DEFINITIONS(${LLVM_DEFINITIONS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACR
 LINK_DIRECTORIES(${LLVM_LIBRARY_DIRS})
 
 # Build qemulib
+IF (${CMAKE_BUILD_TYPE} EQUAL "Debug")
+	SET (QEMU_DEBUG --enable-debug)
+ELSE (${CMAKE_BUILD_TYPE} EQUAL "Debug")
+	SET (QEMU_DEBUG )
+ENDIF (${CMAKE_BUILD_TYPE} EQUAL "Debug")
 
 #First check if the submodule has already been checked out.
 #If not, we can do that right here during the CMAKE generation.
@@ -23,7 +28,7 @@ ENDIF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
 
 ExternalProject_Add(libqemu
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
-	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --enable-debug --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++
+	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++ ${QEMU_DEBUG}
 	BUILD_COMMAND ${MAKE}
 	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build
 	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu.build

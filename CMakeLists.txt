@@ -29,7 +29,7 @@ ENDIF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
 ExternalProject_Add(libqemu
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
 	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++ ${QEMU_DEBUG}
-	BUILD_COMMAND ${MAKE}
+	BUILD_COMMAND $(MAKE)
 	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
 	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
 	INSTALL_COMMAND make install

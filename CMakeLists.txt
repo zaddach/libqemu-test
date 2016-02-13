@@ -39,10 +39,20 @@ ExternalProject_Add(libqemu
 
 SET( QEMU_LIB ${CMAKE_CURRENT_BINARY_DIR}/libqemu/arm-lib/libqemu-arm.so )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/include )
-	
 
-ADD_SUBDIRECTORY( arm_nop )
-ADD_SUBDIRECTORY( thumb_nop )
-ADD_SUBDIRECTORY( arm_invalid_opcode )
-ADD_SUBDIRECTORY( nonexistent_mem )
-ADD_SUBDIRECTORY( ldhandler_accessed )
+ADD_CUSTOM_COMMAND (
+    OUTPUT features
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/features ${CMAKE_CURRENT_BINARY_DIR}/features) 
+
+ADD_CUSTOM_TARGET (check
+    COMMAND cucumber -q
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Run Aruba cucumber testsuite"
+    DEPENDS features
+)
+
+ADD_SUBDIRECTORY( tests/arm_nop )
+ADD_SUBDIRECTORY( tests/thumb_nop )
+ADD_SUBDIRECTORY( tests/arm_invalid_opcode )
+ADD_SUBDIRECTORY( tests/nonexistent_mem )
+ADD_SUBDIRECTORY( tests/ldhandler_accessed )

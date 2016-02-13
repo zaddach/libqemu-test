@@ -1,20 +1,28 @@
 #include <stdio.h>
 #include <libqemu/qemu-lib-external.h>
+#include <llvm/Support/raw_ostream.h>
 
 uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool is_code)
 {
-	printf("Load data: ptr=0x%08lx, width=%d, signed=%d, is_code=%d\n", ptr, width, is_signed, is_code);
     return 0xE1A00000;
 }
 
 int main(int argc, char *argv[])
 {
     CodeFlags code_flags = {.arm = {.thumb = 0}};
+    int error;
+    LLVMValueRef func;
 
     libqemu_init(qemu_ld, NULL);
 
-    LLVMValueRef func = libqemu_gen_intermediate_code(0, code_flags, true);
-    char *func_str = LLVMPrintValueToString(func);
-    printf("%s\n", func_str);
-    LLVMDisposeMessage(func_str);
+    if ((error = libqemu_gen_intermediate_code(0, code_flags, true, &func)) == 0) {
+        char *func_str = LLVMPrintValueToString(func);
+        llvm::outs() << "SUCCESS: Translated instruction" << '\n';
+        llvm::outs() << func_str << '\n';
+        LLVMDisposeMessage(func_str);
+    }
+    else {
+        llvm::outs() << "ERROR: Got error code " << error << " while translating instruction" << '\n';
+        return 1;
+    }
 }

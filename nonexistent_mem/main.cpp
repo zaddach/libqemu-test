@@ -4,23 +4,30 @@
 
 uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool is_code)
 {
-    libqemu_raise_error(env, 1);
+    libqemu_raise_error(env, -ENOMEM);
     return 0;
 }
 
 int main(int argc, char *argv[])
 {
     CodeFlags code_flags = {.arm = {.thumb = 0}};
+    int error;
+    LLVMValueRef func = NULL;
 
     libqemu_init(qemu_ld, NULL);
    
-    LLVMValueRef func = libqemu_gen_intermediate_code(0, code_flags, true);
-    if (!func) {
-        llvm::outs() << "SUCCESS: libqemu_gen_intermediate_code returned NULL as expected" << '\n';
-        return 0;
+    if ((error = libqemu_gen_intermediate_code(0, code_flags, true, &func)) != 0) {
+        if (!func) {
+            llvm::outs() << "SUCCESS: libqemu_gen_intermediate_code returned error code as expected" << '\n';
+            return 0;
+        }
+        else {
+            llvm::outs() << "ERROR: libqemu_gen_intermediate_code returned correct error code, but set output parameter" << '\n';
+            return 1;
+        }
     }
     else {
-        llvm::outs() << "ERROR: libqemu_gen_intermediate_code returned something unexpected" << '\n';
+        llvm::outs() << "ERROR: libqemu_gen_intermediate_code returned with success, but should't have" << '\n';
         return 1;
     }
 }

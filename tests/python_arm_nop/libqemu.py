@@ -85,6 +85,8 @@ class Libqemu():
         self._handle.libqemu_gen_intermediate_code.restype = ctypes.c_int 
         self._handle.libqemu_raise_error.argtypes = [ctypes.c_void_p, ctypes.c_int]
         self._handle.libqemu_raise_error.restype = None
+        self._handle.libqemu_get_target_name.argtypes = []
+        self._handle.libqemu_get_target_name.restype = ctypes.c_char_p
         self._load_callback = _libqemu_load_func(lambda env, addr, size, signed, code: load_callback(self, env, addr, size, signed, code))
         error = self._handle.libqemu_init(self._load_callback, _libqemu_store_func())
         if error != 0:
@@ -100,3 +102,7 @@ class Libqemu():
 
     def raise_error(self, env, error_code):
         self._handle.libqemu_raise_error(env, error_code)
+
+    @property
+    def target_name(self):
+        return self._handle.libqemu_get_target_name().decode(encoding = "ISO-8859-1")

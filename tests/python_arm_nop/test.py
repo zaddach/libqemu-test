@@ -7,6 +7,7 @@ def memhandler(self, env, addr, size, signed, code):
 if __name__ == "__main__":
     codeflags = libqemu.ArmCodeFlags(thumb = False)
     lq = libqemu.Libqemu(memhandler, "/home/ida/projects/build/libqemu-test/libqemu/arm-lib/libqemu-arm.so")
+    print(lq.target_name)
     code = lq.gen_intermediate_code(0, codeflags, True)
     print(code)
 

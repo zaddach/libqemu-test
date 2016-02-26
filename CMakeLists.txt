@@ -30,14 +30,15 @@ ENDIF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure")
 
 ExternalProject_Add(libqemu
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libqemu
-	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++ ${QEMU_DEBUG}
+	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/configure --enable-lib --target-list=arm-lib,i386-lib,x86_64-lib --prefix=${CMAKE_CURRENT_BINARY_DIR}/libqemu --cxx=clang++ ${QEMU_DEBUG}
 	BUILD_COMMAND $(MAKE)
 	BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
 	INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libqemu
 	INSTALL_COMMAND make install
 )
 
-SET( QEMU_LIB ${CMAKE_CURRENT_BINARY_DIR}/libqemu/arm-lib/libqemu-arm.so )
+SET( QEMU_LIB_ARM ${CMAKE_CURRENT_BINARY_DIR}/libqemu/arm-lib/libqemu-arm.so )
+SET( QEMU_LIB_I386 ${CMAKE_CURRENT_BINARY_DIR}/libqemu/i386-lib/libqemu-i386.so )
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/libqemu/include )
 
 ADD_CUSTOM_COMMAND (
@@ -56,3 +57,4 @@ ADD_SUBDIRECTORY( tests/thumb_nop )
 ADD_SUBDIRECTORY( tests/arm_invalid_opcode )
 ADD_SUBDIRECTORY( tests/nonexistent_mem )
 ADD_SUBDIRECTORY( tests/ldhandler_accessed )
+ADD_SUBDIRECTORY( tests/i386_int3 )

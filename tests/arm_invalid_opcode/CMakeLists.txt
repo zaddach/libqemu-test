@@ -4,7 +4,7 @@ SET( SOURCE_FILES
 )
 
 ADD_EXECUTABLE( arm_invalid_opcode ${SOURCE_FILES} )
-TARGET_LINK_LIBRARIES( arm_invalid_opcode ${QEMU_LIB} ${LLVM_LIBRARIES} )
+TARGET_LINK_LIBRARIES( arm_invalid_opcode ${QEMU_LIB_ARM} ${LLVM_LIBRARIES} )
 ADD_DEPENDENCIES( arm_invalid_opcode libqemu )
 ADD_DEPENDENCIES( check arm_invalid_opcode )
 

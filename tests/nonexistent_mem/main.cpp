@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <libqemu/qemu-lib-external.h>
 
-uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool is_code)
+uint64_t qemu_ld(void *env, uint64_t ptr, uint32_t memop, uint32_t mmu_idx)
 {
     libqemu_raise_error(env, -ENOMEM);
     return 0;

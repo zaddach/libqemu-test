@@ -2,7 +2,7 @@
 #include <libqemu/qemu-lib-external.h>
 #include <llvm/Support/raw_ostream.h>
 
-uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool is_code)
+uint64_t qemu_ld(void *env, uint64_t ptr, uint32_t memop, uint32_t mmu_idx)
 {
     return 0xE1A00000;
 }

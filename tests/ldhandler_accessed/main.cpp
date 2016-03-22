@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <libqemu/qemu-lib-external.h>
 
-uint64_t qemu_ld(void *env, uint64_t ptr, unsigned width, bool is_signed, bool is_code)
+uint64_t qemu_ld(void *env, uint64_t ptr, uint32_t memop, uint32_t mmu_idx)
 {
-    printf("SUCCESS: Load data: ptr=0x%08lx, width=%d, signed=%d, is_code=%d\n", ptr, width, is_signed, is_code);
+    printf("SUCCESS: Load data: ptr=0x%08lx, width=%d, signed=%d, is_code=%d\n", ptr, 1 << (memop & LQ_MO_SIZE), memop & LQ_MO_SIGN, memop & LQ_MO_CODE);
     return 0x46c0;
 }
 
